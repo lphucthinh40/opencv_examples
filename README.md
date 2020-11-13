@@ -2,3 +2,4 @@
 Content:
 - Greenscreen Chroma Keying
 - Document Scanner
+- Blemish Remover
