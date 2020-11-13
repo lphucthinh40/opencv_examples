@@ -5,8 +5,8 @@ import numpy as np
 from scanner import DocumentScanner
 from scanner import resize_image
 
-# Use default image: python submission.py
-# For custom image: python submission.py -p {image-path}
+# Use default image: python app.py
+# For custom image: python app.py -p {image-path}
 
 # ASCII code
 SPACE_KEY = 32
@@ -16,7 +16,7 @@ ESCAPE_KEY = 27
 DEFAULT_IMAGE = "./scanned-form.jpg"
 WINDOW_NAME = "Document Scanner"
 DISPLAY_HEIGHT = 960
-MOUSE_RADIUS = 5
+MOUSE_RADIUS = 8
 
 # Global Variables
 ds = DocumentScanner()
@@ -55,7 +55,11 @@ def main(image_path):
 	# load image
 	original_image = cv2.imread(image_path, 1)
 	resized_image, ratio = resize_image(original_image, height = DISPLAY_HEIGHT)
+
+	# scan to detect corners
 	corners = ds.scan(resized_image)
+
+	# display detected region
 	edited_image = ds.drawPolyRegion(resized_image, corners)
 	cv2.putText(edited_image,"Adjust corners with your LEFT MOUSE",
 	            (10,20), cv2.FONT_HERSHEY_SIMPLEX,
@@ -63,6 +67,12 @@ def main(image_path):
 	cv2.putText(edited_image,"Press SPACE to extract document. Press ESC to exit",
                 (10,50), cv2.FONT_HERSHEY_SIMPLEX,
                 0.75,(255,255,255), 1 )
+	for i in range(len(corners)):
+		x, y = corners[i]
+		cv2.putText(edited_image,str(i),
+                (x, y-10), cv2.FONT_HERSHEY_SIMPLEX,
+                1,(0,255,0), 2 )
+
 	# setup OpenCV window
 	cv2.namedWindow(WINDOW_NAME)
 	cv2.setMouseCallback(WINDOW_NAME, mouse_handler)
@@ -71,6 +81,7 @@ def main(image_path):
 	while k!=ESCAPE_KEY:
 		# handle space key
 		if (k==SPACE_KEY):
+			# perform perspective transformation
 			if (app_state==0):
 				warped_image = ds.transform(resized_image, corners)
 				edited_image = warped_image.copy()
@@ -78,6 +89,7 @@ def main(image_path):
                     (5,25), cv2.FONT_HERSHEY_SIMPLEX,
                     0.7,(255,0,0), 1 )
 				app_state=1
+			# or applying thresholding
 			elif (app_state==1):
 				thresh = ds.threshold(warped_image)
 				edited_image = cv2.merge((thresh, thresh, thresh))
@@ -88,7 +100,8 @@ def main(image_path):
 		cv2.imshow(WINDOW_NAME, edited_image)
 		
 		k = cv2.waitKey(20) & 0xFF
-	# save edited image before exit
+	
+	# save edited image before exit (use original image instead of the resized one)
 	corners = (corners / ratio).astype(np.int32)
 	warped = ds.transform(original_image, corners)
 	if app_state==1:

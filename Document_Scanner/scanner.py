@@ -91,6 +91,6 @@ class DocumentScanner:
         edited_image = cv2.polylines(edited_image, [points], 1, [0,255,0], 4)
 
         for pt in points:
-            edited_image = cv2.circle(edited_image,tuple(pt), 5, (0,255,0), -1)
+            edited_image = cv2.circle(edited_image,tuple(pt), 8, (0,255,0), -1)
 
         return edited_image
