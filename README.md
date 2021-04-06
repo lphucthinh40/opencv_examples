@@ -4,3 +4,4 @@ Content:
 - Document Scanner
 - Blemish Remover
 - Smile Detection
+- Face Morphing
