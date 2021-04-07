@@ -11,4 +11,4 @@ This Repo contains a collection of OpenCV project codes that I implemented for r
 | Blemish Remover  | Seamless Cloning | In Progress |
 | Smile Detection | Facial Landmark | In Progress |
 | Face Morphing | Facial Landmark, Delaunay Triangulation | In Progress |
-| Lipstick Apply | Facial Landmark, Image Blending | In Progress |
+| Facial Makeup| Facial Landmark, Image Blending | In Progress |
