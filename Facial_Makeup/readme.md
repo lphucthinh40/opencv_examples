@@ -1,5 +1,5 @@
 ## FACIAL MAKEUP PROJECT
 ---
-** Implemented features: **
+**Implemented features:**
 - Apply Lipstick Color
 - Apply Eye Color
